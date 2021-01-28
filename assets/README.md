@@ -1,2 +1,2 @@
 # Assets
-Assets information: < /br>
+Assets information: < \br>
