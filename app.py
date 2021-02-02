@@ -22,7 +22,6 @@ participants = [
     ]
 
 code = 'DFAS'
-current_index = 0
 
 # List of exercises avaliable
 
