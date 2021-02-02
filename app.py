@@ -6,6 +6,8 @@ Created on Mon Jan 11 14:48:37 2021
 """
 import pandas as pd 
 import dash
+import random as r
+import string
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
@@ -14,6 +16,24 @@ from dash.dependencies import Output, Input
 """
 Data Structure Components
 """
+"""
+Session Info ideal layout
+session info = {'CODE':{'Instructor':'Name',
+                        'Workout Type':'Type',
+                        'Participants':[{'Name':'Name',
+                                         'Team':'Team',
+                                         'Scores':[{'Index':'Number',
+                                                    'Entry':'Entry',
+                                                    'Score':'Score'
+                                                    }]
+                                         }],
+                        Teamscores:{'A': 'Score', 
+                                    'B':'Score',C...
+                                    }
+                        }
+    }
+"""
+sessioninfo = {}
 
 participants = [
     'Rob',
@@ -21,6 +41,13 @@ participants = [
     'Sana'
     ]
 
+workouttypes = [
+    'Impostor'
+    ]
+
+def generate_code(size=4, chars = string.ascii_uppercase):
+    return ''.join(r.choice(chars) for _ in range(size))
+    
 code = 'DFAS'
 
 # List of exercises avaliable
@@ -183,6 +210,31 @@ maindiv1 = html.Div(id = 'main-div-1',
 scorediv = html.Div(id = 'score-div',
                 children = [],
                 )
+"""
+Instructor components
+"""
+header3 = html.H4(children = ['Hey Coach!'], style = {'textAlign' : "center",'margin-top':'30px'})
+
+header4 = html.H6(children = ['Select Workout'], style = {'textAlign' : "center",'margin-top':'30px'})
+
+instructorname = dcc.Input(id = 'instructor-name-input', type = 'text', placeholder = "Enter Name", maxLength = '10', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'15px'})
+
+impostorselect = dbc.Button('Impostor', id = 'impostor-select',n_clicks=0, style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+
+"""
+Main body layout components - instructor
+"""
+
+headerdiv2 = html.Div(id = 'header-div-2',
+                children = [header3],
+                )
+maindiv2 = html.Div(id = 'main-div-2',
+                children = [instructorname,header4,impostorselect],
+                )
+
+scorediv1 = html.Div(id = 'score-div-1',
+                children = [],
+                )
 
 """
 Default Page Layouts
@@ -203,8 +255,13 @@ def Homepage():
 
                         
 def Instructor():
-    layout = html.Div([navbar
-                       
+    layout = html.Div([navbar,
+                       dbc.Row([
+                    dbc.Col([headerdiv2,
+                             maindiv2,
+                             scorediv1
+                             ])
+                    ])
     ])
     return layout
     
@@ -242,7 +299,8 @@ def update_inputs(codein):
         
     return headerlayout, mainlayout
     
-
+#def update_instructor_inputs():
+    
 
 def update_workout(index):
     for i in regular_structure.keys():
@@ -296,6 +354,7 @@ def update_workout(index):
         mainlayout = [participanttable,nextbutton]
         scorelayout = []
     return headerlayout, mainlayout, scorelayout
+
 
     
     
