@@ -9,18 +9,30 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-from app import Homepage, Instructor, Workout, update_inputs, update_workout
+from app import Homepage, Instructor, Workout, InstructorWorkout, update_inputs, instructor_setup, workout_structure, enter_session, update_participants_body
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.UNITED])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],meta_tags=[{'name' : 'viewport',
+                                                                                  'content' : 'width = device-width, initial-scale = 1.0, maximum-scale = 1.2, minimumscale = 0.8'}])
 
 app.config.suppress_callback_exceptions = True
 
 app.layout = html.Div([
     dcc.Location(id = 'url', refresh = False),
-    html.Div(id = 'page-content')
+    html.Div(id = 'page-content'),
+    html.Div(id = 'hidden-div-1',
+                style = {'display':'none'}
+                ),
+    html.Div(id = 'hidden-div-2',
+                style = {'display':'none'}
+                ),
+    html.Div(id = 'hidden-div-3',
+                style = {'display':'none'}
+                )
+    
 ])
 
 
@@ -32,77 +44,9 @@ screentypes = ['inputs',
                'abinput',
                'abcdinput',
                'impostorinput',
+               'intenseburst'
                ]
 """
-
-# List of exercises avaliable
-current_index = 0
-
-exercise = ['Jumping Jacks',
-            'Arm Circles',
-            'Lunges',
-            'Shoulder Taps', 
-            'Pulsing Squats',
-            'Leg Raises',
-            'Plank',
-            'Sit Ups',
-            'Half Burpees',
-            'Mountain Climbers',
-            'Squats',
-            'Bicycle Crunches',
-            'Push Ups',
-            'Side Plank'
-            ]
-
-# Structure of Impostor Workout on Participant side (screen type is the main key, followed by the indexes at which the screen shows and the exercise)
-regular_structure = {
-    'inputs' : {'index' : {0 : None
-                                            }
-                                 },
-    'warmup' : {'index' : {1 : 'Warmup', 
-                           33 : 'Cooldown'
-                                 }
-                      },
-    'leaderboard' : {'index' : {17 : 'Current Standings', 
-                                34 : 'Final Standings'
-                                }
-                     },
-    'numinput' : {'index' : {4 : exercise[2], 
-                             5 : exercise[3], 
-                             8 : exercise[6], 
-                             9 : exercise[7], 
-                             14 : exercise[12], 
-                             15 : exercise[13], 
-                             18 : exercise[13], 
-                             19 : exercise[12], 
-                             24 : exercise[7], 
-                             25 : exercise[6], 
-                             28 : exercise[3], 
-                             29 : exercise[2]
-                             }
-                  },
-    'abinput' : {'index' : {2 : exercise[0], 
-                            3 : exercise[1], 
-                            12 : exercise[10], 
-                            13 : exercise[11],
-                            20 : exercise[11],
-                            21 : exercise[10],
-                            30 : exercise[1],
-                            31 : exercise[0]
-                            }
-                 },
-    'abcdinput' : {'index' :{6 : exercise[4], 
-                             7 : exercise[5], 
-                             10 : exercise[8], 
-                             11 : exercise[9], 
-                             22 : exercise[9], 
-                             23 : exercise[8], 
-                             26 : exercise[5], 
-                             27 : exercise[4]
-                             }
-                   },
-    'impostorinput' : {'index' : {16 : 'Middle Guess', 32 : 'Final Guess'}}
-          }
 
 @app.callback(Output('page-content', 'children'),
             [Input('url', 'pathname')])
@@ -111,31 +55,102 @@ def display_page(pathname):
         return Instructor()
     elif pathname == '/workout':
         return Workout()
+    elif pathname == '/instructor/workout':
+        return InstructorWorkout()
     else:
         global current_index
         current_index = 0
         return Homepage()
 
 @app.callback([Output('header-div','children'),
-               Output('main-div','children')],
-              [Input('code-input','value')])
-def input_updater(codein):
+               Output('main-div','children'),
+               Output('hidden-div-1','children')],
+              [Input('enter-button','n_clicks')],
+              [State('code-input','value')])
+def input_updater(n_clicks,codein):
 
-    header, main = update_inputs(codein)     
+    header, main, hidden = update_inputs(codein)     
            
-    return header, main
+    return header, main, hidden
 
-@app.callback([Output('header-div-1', 'children'),
-                Output('main-div-1', 'children'),
-                Output('score-div', 'children')],
-                [Input('next-button','n_clicks')])
-def update_exercise(n_clicks):
-    global current_index 
-    current_index += 1
-    header, main, score = update_workout(current_index)
-    return header, main, score
+@app.callback([Output('header-div-2', 'children'),
+                Output('main-div-2', 'children'),
+                Output('score-div-2', 'children'),
+                Output('hidden-div-2','children')],
+                [Input('memory-select','n_clicks'),
+                 Input('impostor-select','n_clicks')],
+                [State('instructor-name-input','value')])
+def instructor_session_setup(n_clicks_1,n_clicks_2,name):
+    
+    if n_clicks_1 == 0 and n_clicks_2 == 0:
+        raise PreventUpdate
+    else:
+        changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+        if 'impostor-select' in changed_id:
+            sessiontype = 'Impostor'
+            header, main, score, hidden = instructor_setup(sessiontype, name)
+            return header, main, score, hidden
+        elif 'memory-select' in changed_id:
+            sessiontype = 'Memory'
+            header, main, score, hidden = instructor_setup(sessiontype, name)
+            return header, main, score, hidden
+        else:
+            raise PreventUpdate
+    
+@app.callback([Output('hidden-div-3','children'),
+               Output('url','pathname')],
+              [Input('start-button', 'n_clicks')],
+              [State('url','pathname'), State('name-dropdown','value'), State('hidden-div-1','children'), State('hidden-div-2','children')])    
+def store_details_next_path(n_clicks,path,name,usrcode,inscode):
+    if n_clicks == 0:
+        raise PreventUpdate
+    else:
+        if path == '/instructor':
+            structure = workout_structure(inscode[0])
+            children = [dcc.Store(id='workout-structure', storage_type = 'session', data = structure)]
+            newpath = "/instructor/workout"
+            return children, newpath
+        else:
+            if name:
+                structure = workout_structure(usrcode[0])
+                children = [name,dcc.Store(id='workout-structure', storage_type = 'session', data = structure)]
+                enter_session(usrcode[0], name)
+                newpath = "/workout"
+                return children, newpath
+            else:
+                children = []
+                newpath = "/"
+                return children, newpath
 
-
+@app.callback([Output('current-participants','children')],
+              [Input('check-participants-interval','n_intervals')],
+              [State('hidden-div-1','children'), State('hidden-div-2','children')])
+def update_participants_table(n_intervals,usrcode,inscode):
+    if n_intervals == 0:
+        raise PreventUpdate
+    else:
+        if usrcode:
+            children = update_participants_body(usrcode[0])
+            return children
+        elif inscode:
+            children = update_participants_body(inscode[0])
+            print(children)
+            return children
+        else:
+            raise PreventUpdate
+    
+# @app.callback([Output('header-div-1', 'children'),
+#                 Output('main-div-1', 'children'),
+#                 Output('score-div', 'children')],
+#                 [Input('next-button','n_clicks')])
+# def update_exercise(n_clicks):
+#     global current_index 
+#     if n_clicks == 0:
+#         header, main, score = update_workout(current_index)
+#     else:
+#         current_index += 1
+#         header, main, score = update_workout(current_index)
+#     return header, main, score
 
 if __name__ == '__main__':
     app.run_server(debug=True)
