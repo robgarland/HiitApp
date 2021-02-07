@@ -174,20 +174,21 @@ def update_particpant_exercise(n_intervals,usrcode,name):
 
 @app.callback(Output('show-user-pattern', 'children'),
               [Input('a-button','n_clicks'),
-               Input('b-button','n_clicks')],
+               Input('b-button','n_clicks'),
+               Input('clear-button','n_clicks')],
               [State('hidden-div-1','children'),
               State('hidden-div-3','children')])
-def check_ab_input(n_clicks_1,n_clicks_2,usrcode,name):
+def check_ab_input(n_clicks_1,n_clicks_2,n_clicks_3,usrcode,name):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
-    print(usrcode)
     if usrcode:
         if 'a-button' in changed_id:
             currentpattern = update_ab_pattern('A',usrcode[0],name)
-            print(currentpattern)
             return currentpattern
         elif 'b-button' in changed_id:
             currentpattern = update_ab_pattern('B',usrcode[0],name)
-            print(currentpattern)
+            return currentpattern
+        elif 'clear-button' in changed_id:
+            currentpattern = update_ab_pattern('Clear',usrcode[0],name)
             return currentpattern
         else:
             currentpattern = update_ab_pattern(0,usrcode[0],name)

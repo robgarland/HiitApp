@@ -264,6 +264,8 @@ abutton = dbc.Button('A',id = 'a-button',n_clicks=0, color = 'info', style = {'t
 
 bbutton = dbc.Button('B',id = 'b-button',n_clicks=0, color = 'info',style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px','width':'75vw', 'height':'20vh','font-size':'xx-large'})
 
+clearbutton = dbc.Button('Clear',id = 'clear-button',n_clicks=0, color = 'danger',style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px','width':'75vw'})
+
 abutton1 = dbc.Button('A',id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
 
 bbutton1 = dbc.Button('B',id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
@@ -778,8 +780,7 @@ def update_workout(code,name):
                             ]
             mainlayout = [html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
                           html.H4(id = 'show-user-pattern', children = [update_ab_pattern(0,code,name)], style = {'textAlign' : "center",'margin-top':'30px'}),
-                          abutton,bbutton,update_exercise_interval]
-            print(update_ab_pattern(0,code,name))
+                          abutton,bbutton,clearbutton,update_exercise_interval]
             scorelayout = []
             
     elif screentype == 'abcdinput':
@@ -846,7 +847,6 @@ def update_workout(code,name):
 
 def create_score_entry(code,name):
     index = sessioninfo[code]['Current Index']
-    print(name)
     for i in range(len(sessioninfo[code]['Participants'])):
         if sessioninfo[code]['Participants'][i]['Name'] == name[0]:
             partindex = i
@@ -856,8 +856,6 @@ def create_score_entry(code,name):
             pass
     except KeyError:
         sessioninfo[code]['Participants'][partindex]['Scores'][index] =  {'Entry':'','Score':0}
-        
-
     
 def update_ab_pattern(button,code,name):
     index = sessioninfo[code]['Current Index']
@@ -867,18 +865,17 @@ def update_ab_pattern(button,code,name):
                 partindex = i
                 break
         pattern = sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry']
-    print(pattern)  
     if button == 'A' and len(pattern) < 5:
-        pattern+='A'
-        print(pattern)  
+        pattern+='A' 
         sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
-        print(sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'])  
         return pattern
     elif button == 'B' and len(pattern) < 5:
         pattern+='B'
-        print(pattern)  
         sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
-        print(sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'])
+        return pattern
+    elif button == 'Clear':
+        pattern = ''
+        sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
         return pattern
     else:
         if sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] == '':
