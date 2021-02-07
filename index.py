@@ -13,7 +13,7 @@ from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-from app import Homepage, Instructor, Workout, InstructorWorkout, update_inputs, instructor_setup, workout_structure, enter_session, update_participants_body, update_instructor_workout, update_index, update_workout
+from app import Homepage, Instructor, Workout, InstructorWorkout, update_inputs, instructor_setup, workout_structure, enter_session, update_participants_body, update_instructor_workout, update_index, get_index, state_to_rest, state_to_exercise, update_workout, update_ab_pattern
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],meta_tags=[{'name' : 'viewport',
                                                                                   'content' : 'width = device-width, initial-scale = 1.0, maximum-scale = 1.2, minimumscale = 0.8'}])
@@ -134,27 +134,64 @@ def update_participants_table(n_intervals,usrcode,inscode):
 @app.callback([Output('header-div-3', 'children'),
                 Output('main-div-3', 'children'),
                 Output('score-div-3', 'children')],
-                [Input('moveon-button','n_clicks')],
+                [Input('moveon-button-to-rest','n_clicks'),
+                 Input('moveon-button-to-exercise','n_clicks')],
                 [State('hidden-div-2','children')])
-def update_instructor_exercise(n_clicks,inscode):
-    if n_clicks == 0:
-        header, main, score = update_instructor_workout(0,inscode[0])
+def update_instructor_exercise(n_clicks_1,n_clicks_2,inscode):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    if 'moveon-button-to-rest' in changed_id:
+        if n_clicks_1 and n_clicks_2 == 0:
+            header, main, score = update_instructor_workout(0,'Rest',inscode[0])
+        else:
+            current_index = get_index(inscode[0])
+            newstate = state_to_rest(inscode[0])
+            header, main, score = update_instructor_workout(current_index,newstate,inscode[0])
+            
+    elif 'moveon-button-to-exercise' in changed_id:
+        if n_clicks_1 and n_clicks_2 == 0:
+            header, main, score = update_instructor_workout(0,'Exercise',inscode[0])
+        else:
+            current_index = update_index(inscode[0])
+            newstate = state_to_exercise(inscode[0])
+            header, main, score = update_instructor_workout(current_index, newstate, inscode[0])
     else:
-        current_index = update_index(inscode[0])
-        header, main, score = update_instructor_workout(current_index,inscode[0])
+        raise PreventUpdate
+        
     return header, main, score
 
 @app.callback([Output('header-div-1', 'children'),
                 Output('main-div-1', 'children'),
                 Output('score-div', 'children')],
                 [Input('update-exercise-interval','n_intervals')],
-                [State('hidden-div-1','children')])
-def update_particpant_exercise(n_intervals,usrcode):
+                [State('hidden-div-1','children'),
+                 State('hidden-div-3','children')])
+def update_particpant_exercise(n_intervals,usrcode,name):
     if usrcode:
-        header, main, score = update_workout(usrcode[0])
+        header, main, score = update_workout(usrcode[0],name)
         return header, main, score
     else:
         raise PreventUpdate
 
+@app.callback(Output('show-user-pattern', 'children'),
+              [Input('a-button','n_clicks'),
+               Input('b-button','n_clicks')],
+              [State('hidden-div-1','children'),
+              State('hidden-div-3','children')])
+def check_ab_input(n_clicks_1,n_clicks_2,usrcode,name):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    print(usrcode)
+    if usrcode:
+        if 'a-button' in changed_id:
+            currentpattern = update_ab_pattern('A',usrcode[0],name)
+            print(currentpattern)
+            return currentpattern
+        elif 'b-button' in changed_id:
+            currentpattern = update_ab_pattern('B',usrcode[0],name)
+            print(currentpattern)
+            return currentpattern
+        else:
+            currentpattern = update_ab_pattern(0,usrcode[0],name)
+            return currentpattern
+    
 if __name__ == '__main__':
     app.run_server(debug=True)

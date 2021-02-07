@@ -21,13 +21,13 @@ Session Info ideal layout
 session info = {'CODE':{'Instructor':'Name',
                         'Workout Type':'Type',
                         'Current Index' : 'Number' (starting at 0)
+                        'Current State' : 'Exercise/Rest'
                         'Structure' : 
                         'Participants':[{'Name':'Name',
                                          'Team':'Team',
-                                         'Scores':[{'Index':'Number',
-                                                    'Entry':'Entry',
-                                                    'Score':'Score'
-                                                    }]
+                                         'Scores':{'Index':{'Entry':'Entry',
+                                                    'Score':'Score'}
+                                                    }
                                          'Total Score' : 'Score'
                                          }],
                         Teamscores:{'A': 'Score', 
@@ -321,7 +321,13 @@ bullseyeselect = dbc.Button('Bullseye', id = 'bullseye-select',n_clicks=0, color
 
 nemsg = html.H6(children = ['Please enter your name'], style = {'textAlign' : 'center','margin-top':'30px','color':'red'})
 
-moveonbutton = dbc.Button('Move On -->', id = 'moveon-button',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+moveonbutton_re = dbc.Button('Move On -->', id = 'moveon-button-to-rest',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+
+moveonbutton_ex = dbc.Button('Move On -->', id = 'moveon-button-to-exercise',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+
+hidden_moveonbutton_ex = dbc.Button(id = 'moveon-button-to-exercise', style = {'display':'none'})
+
+hidden_moveonbutton_re = dbc.Button(id = 'moveon-button-to-rest', style = {'display':'none'})
 
 """
 Main body layout components - instructor
@@ -342,7 +348,7 @@ headerdiv3 = html.Div(id = 'header-div-3',
                 children = []
                 )
 maindiv3 = html.Div(id = 'main-div-3',
-                children = [moveonbutton]
+                children = [moveonbutton_ex,hidden_moveonbutton_re]
                 )
 
 scorediv3 = html.Div(id = 'score-div-3',
@@ -428,7 +434,7 @@ def instructor_setup(sessiontype,name):
             while code in sessioninfo.keys():
                 code = generate_code()              #ensuring no duplicate code is produced
                     
-            sessioninfo[code] = {'Instructor':name,'Workout Type':sessiontype,'Structure': {'inputs' : {'index' : {0 : {'Exercise': 'Inputs'}}}}, 'Current Index':0,'Participants':[],'Teamscores':{'A':0,'B':0}} #note the a/b thing can change based on the survey we create, and the inputs will affect the team types (user can chooose what to split by somehow, needs development)
+            sessioninfo[code] = {'Instructor':name,'Workout Type':sessiontype,'Structure': {'inputs' : {'index' : {0 : {'Exercise': 'Inputs'}}}}, 'Current Index':0, 'Current State': 'Exercise', 'Participants':[],'Teamscores':{'A':0,'B':0}} #note the a/b thing can change based on the survey we create, and the inputs will affect the team types (user can chooose what to split by somehow, needs development)
             header = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [name], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H6(children = ['Selected Workout:'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -552,8 +558,7 @@ def generate_questions(structure,session_users):
        
 def enter_session(code,name):
     if code:
-        sessioninfo[code]['Participants'].append({'Name':name,'Team':'','Scores':[],'Total Score':0})
-        print(sessioninfo[code]['Participants'])
+        sessioninfo[code]['Participants'].append({'Name':name,'Team':'','Scores':{},'Total Score':0})
 
 def update_participants_body(code):
     if len(sessioninfo[code]['Participants']) > 0:
@@ -564,14 +569,35 @@ def update_participants_body(code):
         body = [[html.Tr([html.Td('Waiting For Participants')])]]   
     return body
 
+def get_index(code):
+    if code:
+        index = sessioninfo[code]['Current Index']
+        return index
+    else:
+        return 0
+    
 def update_index(code):
     if code:
         sessioninfo[code]['Current Index'] += 1
         return sessioninfo[code]['Current Index']
     else:
         return sessioninfo[code]['Current Index']
+
+def state_to_rest(code):
+    if code:
+        sessioninfo[code]['Current State'] = 'Rest'
+        return sessioninfo[code]['Current State']
+    else:
+        return sessioninfo[code]['Current State']
+
+def state_to_exercise(code):
+    if code:
+        sessioninfo[code]['Current State'] = 'Exercise'
+        return sessioninfo[code]['Current State']
+    else:
+        return sessioninfo[code]['Current State']
     
-def update_instructor_workout(index,code):
+def update_instructor_workout(index, newstate, code):
     structure = sessioninfo[code]['Structure']
     for i in structure.keys():
         for j in structure[i]['index'].keys():
@@ -585,68 +611,110 @@ def update_instructor_workout(index,code):
         if int(j) == int(index):
             break
     participanttable = participant_table(code) 
+    
     if screentype == 'inputs':
         headerlayout = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [sessioninfo[code]['Instructor']], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H6(children = ['Selected Workout:'], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [sessioninfo[code]['Workout Type']], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [participanttable,moveonbutton,check_participant_interval]
+        mainlayout = [participanttable,moveonbutton_ex,check_participant_interval,hidden_moveonbutton_re]
         scorelayout = []
+        
     elif screentype == 'warmup':
         headerlayout = Warmcool(index,structure)
         if structure['warmup']['index'][index]['Exercise'] in ['Warmup','Halfway']:
-            mainlayout = [moveonbutton]
+            mainlayout = [moveonbutton_ex,hidden_moveonbutton_re]
         elif structure['warmup']['index'][index]['Exercise'] == 'Cooldown':
             mainlayout = [quitbutton]
         scorelayout =[]
+        
     elif screentype == 'leaderboard':
         headerlayout = [html.H6(children = [structure['leaderboard']['index'][index]['Exercise']], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [participanttable,moveonbutton]
+        mainlayout = [participanttable,moveonbutton_ex,hidden_moveonbutton_re]
         scorelayout = []
+        
     elif screentype == 'numinput':
-        headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [numberinput,moveonbutton]
-        scorelayout = []
+        if newstate == 'Exercise':
+            headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [numberinput,moveonbutton_re,hidden_moveonbutton_ex]
+            scorelayout = []
+        elif newstate == 'Rest':
+            headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [numberinput,moveonbutton_ex,hidden_moveonbutton_re]
+            scorelayout = []
+            
     elif screentype == 'abinput':
         target = structure['abinput']['index'][index]['Target']
         answer = structure['abinput']['index'][index]['Answer']
-        headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
+        if newstate == 'Exercise':
+            headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
                         html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
                         ]
-        mainlayout = [html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+            mainlayout = [html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [answer], style = {'textAlign' : "center",'margin-top':'30px'}),
-                      moveonbutton]
-        scorelayout = []
+                      moveonbutton_re,hidden_moveonbutton_ex]
+            scorelayout = []
+        elif newstate == 'Rest':
+            headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                        html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                        ]
+            mainlayout = [html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+                      html.H4(children = [answer], style = {'textAlign' : "center",'margin-top':'30px'}),
+                      html.H6(children = ['Total Answered:'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                      moveonbutton_ex, hidden_moveonbutton_re]
+            scorelayout = []
+        
     elif screentype == 'abcdinput':
         target = structure['abcdinput']['index'][index]['Target']
         targetplayer = structure['abcdinput']['index'][index]['Target Player']
         answer = structure['abcdinput']['index'][index]['Answer']
         options = structure['abcdinput']['index'][index]['Options']
         a = list(answer.values())
-        headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H4(children = [targetplayer], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H6(children = ['Answer: ',a[0]], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [moveonbutton]
-        scorelayout = []
+        if newstate == 'Exercise':
+            headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [targetplayer], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = ['Answer: ',a[0]], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [moveonbutton_re, hidden_moveonbutton_ex]
+            scorelayout = []
+        elif newstate == 'Rest':
+            headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [targetplayer], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = ['Answer: ',a[0]], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = ['Total Answered:'], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [moveonbutton_ex, hidden_moveonbutton_re]
+            scorelayout = []
+            
     elif screentype == 'impostorinput':
-        headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [impostorguess,moveonbutton]
+        headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
+                        html.H6(children = ['Total Answered:'], style = {'textAlign' : "center",'margin-top':'30px'})]
+        mainlayout = [impostorguess,moveonbutton_ex,hidden_moveonbutton_re]
         scorelayout = []
+            
     elif screentype == 'intenseburst':
-        headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [moveonbutton]
-        scorelayout = []
+        if newstate == 'Exercise':
+            headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),]
+            mainlayout = [moveonbutton_re,hidden_moveonbutton_ex]
+            scorelayout = []
+        if newstate == 'Rest':
+            headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [moveonbutton_ex,hidden_moveonbutton_re]
+            scorelayout = []
+        
     else:
         headerlayout = []
-        mainlayout = [participanttable,moveonbutton]
+        mainlayout = [participanttable,moveonbutton_ex,hidden_moveonbutton_re]
         scorelayout = []
     return headerlayout, mainlayout, scorelayout
 
-def update_workout(code):
+def update_workout(code,name):
     index = sessioninfo[code]['Current Index']
+    state = sessioninfo[code]['Current State']
     structure = sessioninfo[code]['Structure']
     for i in structure.keys():
         for j in structure[i]['index'].keys():
@@ -659,7 +727,8 @@ def update_workout(code):
                 exercisetype = None
         if int(j) == int(index):
             break
-    participanttable = participant_table(code)    
+    participanttable = participant_table(code)  
+    
     if screentype == 'inputs':
         headerlayout = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [sessioninfo[code]['Instructor']], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -667,6 +736,7 @@ def update_workout(code):
                       html.H4(children = [sessioninfo[code]['Workout Type']], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [participanttable,update_exercise_interval]
         scorelayout = []
+        
     elif screentype == 'warmup':
         headerlayout = Warmcool(index,structure)
         if structure['warmup']['index'][index]['Exercise'] in ['Warmup','Halfway']:
@@ -674,69 +744,148 @@ def update_workout(code):
         elif structure['warmup']['index'][index]['Exercise'] == 'Cooldown':
             mainlayout = [quitbutton]
         scorelayout =[]
+        
     elif screentype == 'leaderboard':
         headerlayout = [html.H6(children = [structure['leaderboard']['index'][index]['Exercise']], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [update_exercise_interval, participanttable]
         scorelayout = []
+        
     elif screentype == 'numinput':
-        headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [update_exercise_interval, numberinput]
-        scorelayout = []
+        create_score_entry(code,name)
+        if state == 'Exercise':
+            headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [update_exercise_interval, numberinput]
+            scorelayout = []
+        elif state == 'Rest':
+            headerlayout = [html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = ['Enter your number below:'], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [update_exercise_interval, numberinput]
+            scorelayout = []
+            
     elif screentype == 'abinput':
+        create_score_entry(code,name)
         target = structure['abinput']['index'][index]['Target']
         answer = structure['abinput']['index'][index]['Answer']
-        headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        ]
-        mainlayout = [html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
-                      html.H4(id = 'show-user-pattern', children = [answer], style = {'textAlign' : "center",'margin-top':'30px'}),
-                      abutton,bbutton,update_exercise_interval]
-        scorelayout = []
+        if state == 'Exercise':
+            headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})
+                            ]
+            mainlayout = [update_exercise_interval]
+            scorelayout = []
+        elif state == 'Rest':
+            headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            ]
+            mainlayout = [html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+                          html.H4(id = 'show-user-pattern', children = [update_ab_pattern(0,code,name)], style = {'textAlign' : "center",'margin-top':'30px'}),
+                          abutton,bbutton,update_exercise_interval]
+            print(update_ab_pattern(0,code,name))
+            scorelayout = []
+            
     elif screentype == 'abcdinput':
+        create_score_entry(code,name)
         target = structure['abcdinput']['index'][index]['Target']
         targetplayer = structure['abcdinput']['index'][index]['Target Player']
         answer = structure['abcdinput']['index'][index]['Answer']
         options = structure['abcdinput']['index'][index]['Options']
-        
-        headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H6(children = ['What did ', targetplayer, ' answer?'], style = {'textAlign' : "center",'margin-top':'30px'})]
-        if len(options) == 2: 
-            mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          update_exercise_interval]
-        elif len(options) == 3:
-            mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          update_exercise_interval]
-        elif len(options) == 4:
-            mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          dbc.Button(options['D'],id = 'd-button-1',n_clicks=0, color = 'success', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                          update_exercise_interval] 
-        else:
+        if state == 'Exercise':
+            headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = ['What did ', targetplayer, ' answer?'], style = {'textAlign' : "center",'margin-top':'30px'})]
             mainlayout = [update_exercise_interval]
-        scorelayout = []
+            scorelayout = []
+            
+        elif state == 'Rest':
+            headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H6(children = ['What did ', targetplayer, ' answer?'], style = {'textAlign' : "center",'margin-top':'30px'})]
+            if len(options) == 2: 
+                mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              update_exercise_interval]
+            elif len(options) == 3:
+                mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              update_exercise_interval]
+            elif len(options) == 4:
+                mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              dbc.Button(options['D'],id = 'd-button-1',n_clicks=0, color = 'success', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                              update_exercise_interval] 
+            else:
+                mainlayout = [update_exercise_interval]
+            scorelayout = []
+        
     elif screentype == 'impostorinput':
+        create_score_entry(code,name)
         headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [impostorguess,update_exercise_interval]
         scorelayout = []
+        
     elif screentype == 'intenseburst':
-        headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
-                        html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
-        mainlayout = [update_exercise_interval]
-        scorelayout = []
+        if state == 'Exercise':
+            headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [update_exercise_interval]
+            scorelayout = []
+        elif state == 'Rest':
+            headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
+                            html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'})]
+            mainlayout = [update_exercise_interval]
+            scorelayout = []
+        
     else:
         headerlayout = []
         mainlayout = [participanttable,update_exercise_interval]
         scorelayout = []
     return headerlayout, mainlayout, scorelayout
-    
+
+def create_score_entry(code,name):
+    index = sessioninfo[code]['Current Index']
+    print(name)
+    for i in range(len(sessioninfo[code]['Participants'])):
+        if sessioninfo[code]['Participants'][i]['Name'] == name[0]:
+            partindex = i
+            break
+    try:
+        if sessioninfo[code]['Participants'][partindex]['Scores'][index]:
+            pass
+    except KeyError:
+        sessioninfo[code]['Participants'][partindex]['Scores'][index] =  {'Entry':'','Score':0}
         
-           
+
+    
+def update_ab_pattern(button,code,name):
+    index = sessioninfo[code]['Current Index']
+    if code:
+        for i in range(len(sessioninfo[code]['Participants'])):
+            if sessioninfo[code]['Participants'][i]['Name'] == name[0]:
+                partindex = i
+                break
+        pattern = sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry']
+    print(pattern)  
+    if button == 'A' and len(pattern) < 5:
+        pattern+='A'
+        print(pattern)  
+        sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
+        print(sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'])  
+        return pattern
+    elif button == 'B' and len(pattern) < 5:
+        pattern+='B'
+        print(pattern)  
+        sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
+        print(sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'])
+        return pattern
+    else:
+        if sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] == '':
+            return 'Tap A/B!'
+        else:
+            return pattern
+               
     
 
 
