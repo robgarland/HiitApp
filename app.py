@@ -953,10 +953,12 @@ def update_workout(code,name):
                                   dbc.Button(id = 'd-button-1',n_clicks=0, style = {'display' : 'none'}),
                                   update_exercise_interval]
                 elif len(options) == 3:
-                    mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(id = 'd-button-1',n_clicks=0, style = {'display' : 'none'}),
+                    mainlayout = [dbc.Row([dbc.Col([dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'})
+                                  ]),
+                                  dbc.Col([dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                                  dbc.Button(options['D'],id = 'd-button-1',n_clicks=0, style = {'display':'none'})
+                                  ])]),
                                   update_exercise_interval]
                 elif len(options) == 4:
                     mainlayout = [dbc.Row([dbc.Col([dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
@@ -1115,9 +1117,9 @@ def update_leaderboard(code,name):
                 break
         leaderboard = html.Tbody(children = [
                                 html.Tr([
-                                    html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                    html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                    html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px'})
+                                    html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                    html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                    html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
                                     ]),
                                 html.Tr([
                                     html.Td(player[2]),
@@ -1144,9 +1146,9 @@ def update_instructor_leaderboard(code):
         if totalpeople == 1:
             leaderboard = html.Tbody(children = [
                                     html.Tr([
-                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px'})
+                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
                                         ])
                                     ], id = 'live-leaderboard')
             return leaderboard
@@ -1154,9 +1156,9 @@ def update_instructor_leaderboard(code):
             second = participants_scores[1]
             leaderboard = html.Tbody(children = [
                                     html.Tr([
-                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px'})
+                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
                                         ]),
                                     html.Tr([
                                         html.Td(second[2],style={'padding-left': '15px', 'padding-right': '15px'}),
@@ -1170,9 +1172,9 @@ def update_instructor_leaderboard(code):
             third = participants_scores[2]
             leaderboard = html.Tbody(children = [
                                     html.Tr([
-                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px'})
+                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
                                         ]),
                                     html.Tr([
                                         html.Td(second[2],style={'padding-left': '15px', 'padding-right': '15px'}),
