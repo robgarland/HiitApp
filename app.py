@@ -4,7 +4,7 @@ Created on Mon Jan 11 14:48:37 2021
 
 @author: garla
 """
-import pandas as pd 
+import pandas as pd
 import dash
 import random as r
 import string
@@ -22,7 +22,7 @@ session info = {'CODE':{'Instructor':'Name',
                         'Workout Type':'Type',
                         'Current Index' : 'Number' (starting at 0)
                         'Current State' : 'Exercise/Rest'
-                        'Structure' : 
+                        'Structure' :
                         'Participants':[{'Name':'Name',
                                          'Team':'Team',
                                          'Scores':{'Index':{'Entry':'Entry',
@@ -30,7 +30,7 @@ session info = {'CODE':{'Instructor':'Name',
                                                     }
                                          'Total Score' : 'Score'
                                          }],
-                        Teamscores:{'A': 'Score', 
+                        Teamscores:{'A': 'Score',
                                     'B':'Score',C...
                                     }
                         }
@@ -58,7 +58,7 @@ def generate_code(size=4, chars = string.ascii_uppercase):
 exercise = ['Jumping Jacks',
             'Arm Circles',
             'Lunges',
-            'Shoulder Taps', 
+            'Shoulder Taps',
             'Pulsing Squats',
             'Leg Raises',
             'Plank',
@@ -81,32 +81,32 @@ impostor_structure = {
     'inputs' : {'index' : {0 : {'Exercise': 'Inputs'}
                                             }
                                  },
-    'warmup' : {'index' : {1 : {'Exercise': 'Warmup'}, 
+    'warmup' : {'index' : {1 : {'Exercise': 'Warmup'},
                            33 : {'Exercise': 'Cooldown'}
                                  }
                       },
-    'leaderboard' : {'index' : {17 : {'Exercise': 'Current Leaderboard'}, 
+    'leaderboard' : {'index' : {17 : {'Exercise': 'Current Leaderboard'},
                                 34 : {'Exercise': 'Final Leaderboard'}
                                 },
                      'participants' : {}
                      },
-    'numinput' : {'index' : {4 : {'Exercise' : exercise[2]}, 
-                             5 : {'Exercise' :exercise[3]}, 
-                             8 : {'Exercise' :exercise[6]}, 
-                             9 : {'Exercise' :exercise[7]}, 
-                             14 : {'Exercise' :exercise[12]}, 
-                             15 : {'Exercise' :exercise[13]}, 
-                             18 : {'Exercise' :exercise[13]}, 
-                             19 : {'Exercise' :exercise[12]}, 
-                             24 : {'Exercise' :exercise[7]}, 
-                             25 : {'Exercise' :exercise[6]}, 
-                             28 : {'Exercise' :exercise[3]}, 
+    'numinput' : {'index' : {4 : {'Exercise' : exercise[2]},
+                             5 : {'Exercise' :exercise[3]},
+                             8 : {'Exercise' :exercise[6]},
+                             9 : {'Exercise' :exercise[7]},
+                             14 : {'Exercise' :exercise[12]},
+                             15 : {'Exercise' :exercise[13]},
+                             18 : {'Exercise' :exercise[13]},
+                             19 : {'Exercise' :exercise[12]},
+                             24 : {'Exercise' :exercise[7]},
+                             25 : {'Exercise' :exercise[6]},
+                             28 : {'Exercise' :exercise[3]},
                              29 : {'Exercise' :exercise[2]}
                              }
                   },
-    'abinput' : {'index' : {2 : {'Exercise' :exercise[0]}, 
-                            3 : {'Exercise' :exercise[1]}, 
-                            12 : {'Exercise' :exercise[10]}, 
+    'abinput' : {'index' : {2 : {'Exercise' :exercise[0]},
+                            3 : {'Exercise' :exercise[1]},
+                            12 : {'Exercise' :exercise[10]},
                             13 : {'Exercise' :exercise[11]},
                             20 : {'Exercise' :exercise[11]},
                             21 : {'Exercise' :exercise[10]},
@@ -114,13 +114,13 @@ impostor_structure = {
                             31 : {'Exercise' :exercise[0]}
                             }
                  },
-    'abcdinput' : {'index' :{6 : {'Exercise' :exercise[4]}, 
-                             7 : {'Exercise' :exercise[5]}, 
-                             10 : {'Exercise' :exercise[8]}, 
-                             11 : {'Exercise' :exercise[9]}, 
-                             22 : {'Exercise' :exercise[9]}, 
-                             23 : {'Exercise' :exercise[8]}, 
-                             26 : {'Exercise' :exercise[5]}, 
+    'abcdinput' : {'index' :{6 : {'Exercise' :exercise[4]},
+                             7 : {'Exercise' :exercise[5]},
+                             10 : {'Exercise' :exercise[8]},
+                             11 : {'Exercise' :exercise[9]},
+                             22 : {'Exercise' :exercise[9]},
+                             23 : {'Exercise' :exercise[8]},
+                             26 : {'Exercise' :exercise[5]},
                              27 : {'Exercise' :exercise[4]}
                              }
                    },
@@ -136,34 +136,34 @@ icebreaker_structure = {
                            29 : {'Exercise': 'Cooldown'}
                                  }
                       },
-    'leaderboard' : {'index' : {15 : {'Exercise':'Current Leaderboard'}, 
+    'leaderboard' : {'index' : {15 : {'Exercise':'Current Leaderboard'},
                                 28 : {'Exercise':'Final Leaderboard'}
                                 },
                      'participants' : {}
                      },
-    'abinput' : {'index' : {2 : {'Exercise' :exercise[0]}, 
+    'abinput' : {'index' : {2 : {'Exercise' :exercise[0]},
                             3 : {'Exercise' :exercise[1]},
                             4 : {'Exercise' :exercise[2]},
                             5 : {'Exercise' :exercise[3]},
                             24 : {'Exercise' :exercise[3]},
                             25 : {'Exercise' :exercise[2]},
                             26 : {'Exercise' :exercise[1]},
-                            27 : {'Exercise' :exercise[0]} 
+                            27 : {'Exercise' :exercise[0]}
                             }
                  },
-    'abcdinput' : {'index' :{8 : {'Exercise' :exercise[6]}, 
-                             9 : {'Exercise' :exercise[7]}, 
-                             10 : {'Exercise' :exercise[8]}, 
-                             11 : {'Exercise' :exercise[9]}, 
-                             18 : {'Exercise' :exercise[9]}, 
-                             19 : {'Exercise' :exercise[8]}, 
-                             20 : {'Exercise' :exercise[7]}, 
+    'abcdinput' : {'index' :{8 : {'Exercise' :exercise[6]},
+                             9 : {'Exercise' :exercise[7]},
+                             10 : {'Exercise' :exercise[8]},
+                             11 : {'Exercise' :exercise[9]},
+                             18 : {'Exercise' :exercise[9]},
+                             19 : {'Exercise' :exercise[8]},
+                             20 : {'Exercise' :exercise[7]},
                              21 : {'Exercise' :exercise[6]}
                              }
                    },
     'intenseburst': {'index' : {6 : {'Exercise' :exercise[4]},
                                 7 : {'Exercise' :exercise[5]},
-                                12 : {'Exercise' :exercise[10]}, 
+                                12 : {'Exercise' :exercise[10]},
                                 13 : {'Exercise' :exercise[11]},
                                 16 : {'Exercise' :exercise[11]},
                                 17 : {'Exercise' :exercise[10]},
@@ -182,7 +182,7 @@ def Navbar():
      navbar = dbc.Navbar([dbc.NavbarBrand("Hiit Me Up Workout"),
                           dbc.NavLink("Quit", href="/", className="ml-auto",style = {'color':'#5AC4D8'})
                           ], color = '#0A455A', sticky = 'top',dark = True)
-    
+
      return navbar
 
 """
@@ -199,9 +199,9 @@ codeinput = dcc.Input(id = 'code-input', type = 'text', placeholder = "4-Digit C
 
 nameinput = dcc.Dropdown(id = 'name-dropdown', options = [{'label': survey_participants.iloc[i], 'value' : survey_participants.iloc[i]} for i in range(len(survey_participants))], style = {'textAlign':'center','display':'block','margin-left':'auto','margin-right':'auto','width':'80%','margin-top':'15px'})
 
-enterbutton = dbc.Button('Enter',id = 'enter-button', n_clicks = 0, color = 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+enterbutton = dbc.Button('Enter',id = 'enter-button', n_clicks = 0, color = 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px', 'touch-action': 'manipulation'})
 
-startbutton = dbc.Button('Start', id = 'start-button',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+startbutton = dbc.Button('Start', id = 'start-button',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px', 'touch-action': 'manipulation'})
 
 """
 Workout Screen Components
@@ -269,7 +269,7 @@ def CreatePosition(scores):
         else:
             scores[ix].append('{}{}'.format(ix - cur_count + 1,suf))
     return scores
-         
+
 def leader_board(code):
     totalpeople = len(sessioninfo[code]['Participants'])
     if totalpeople > 0:
@@ -312,7 +312,7 @@ def leader_board(code):
 
 def initial_live_leaderboard():
     leaderboard = html.Div([
-                        html.H6('Leaderboard', style = {'textAlign' : 'center', 'display':'block', 'margin-left' : 'auto', 'margin-right':'auto'}), 
+                        html.H6('Leaderboard', style = {'textAlign' : 'center', 'display':'block', 'margin-left' : 'auto', 'margin-right':'auto'}),
                         html.Table(children = [
                             html.Tbody(children = [
                                 html.Tr([
@@ -321,10 +321,10 @@ def initial_live_leaderboard():
                                 ], id = 'live-leaderboard-usr')], style = {'textAlign' : 'center', 'margin-left' : 'auto', 'margin-right':'auto'})]
                             , style = {'position' : 'absolute','bottom' : 0, 'left' : 0, 'right' : 0, 'display':'block', 'padding-bottom' : '10px','padding-top' : '5px' ,'background-color':'#5AC4D8'})
     return leaderboard
-        
+
 def initial_live_instructor_leaderboard():
     leaderboard = html.Div([
-                        html.H6('Leaderboard', style = {'textAlign' : 'center', 'display':'block', 'margin-left' : 'auto', 'margin-right':'auto'}), 
+                        html.H6('Leaderboard', style = {'textAlign' : 'center', 'display':'block', 'margin-left' : 'auto', 'margin-right':'auto'}),
                         html.Table(children = [
                             html.Tbody(children = [
                                 html.Tr([
@@ -332,19 +332,19 @@ def initial_live_instructor_leaderboard():
                                     ])
                                 ], id = 'live-leaderboard-ins')], style = {'textAlign' : 'center', 'margin-left' : 'auto', 'margin-right':'auto'})]
                             , style = {'position' : 'absolute','bottom' : 0, 'left' : 0, 'right' : 0, 'display':'block', 'padding-bottom' : '10px','padding-top' : '5px' ,'background-color':'#5AC4D8'})
-    return leaderboard        
+    return leaderboard
 
 check_participant_interval = dcc.Interval(id = 'check-participants-interval', interval = 2000, n_intervals = 0)
 
 update_exercise_interval = dcc.Interval(id = 'update-exercise-interval', interval = 1000, n_intervals = 0)
 
-submitbutton = dbc.Button('Submit',id = 'submit-button', n_clicks = 0, className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-top':'20px', 'width':'36vw'})
+submitbutton = dbc.Button('Submit',id = 'submit-button', n_clicks = 0, className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-top':'20px', 'width':'36vw','touch-action': 'manipulation'})
 
-abutton = dbc.Button('A',id = 'a-button',n_clicks=0, color = 'info', className="ml-auto", style = {'textAlign' : "center", 'display':'block', 'margin-top':'20px', 'width':'36vw', 'height':'18vh', 'font-size':'xx-large'})
+abutton = dbc.Button('A',id = 'a-button',n_clicks=0, color = 'info', className="ml-auto", style = {'textAlign' : "center", 'display':'block', 'margin-top':'20px', 'width':'36vw', 'height':'18vh', 'font-size':'xx-large','touch-action': 'manipulation'})
 
-bbutton = dbc.Button('B',id = 'b-button',n_clicks=0, color = 'info', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-top':'20px','width':'36vw','height':'18vh','font-size':'xx-large'})
+bbutton = dbc.Button('B',id = 'b-button',n_clicks=0, color = 'info', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-top':'20px','width':'36vw','height':'18vh','font-size':'xx-large','touch-action': 'manipulation'})
 
-clearbutton = dbc.Button('Clear',id = 'clear-button',n_clicks=0, className="ml-auto", color = 'danger',style = {'textAlign' : "center", 'display':'block','margin-top':'20px','width':'36vw'})
+clearbutton = dbc.Button('Clear',id = 'clear-button',n_clicks=0, className="ml-auto", color = 'danger',style = {'textAlign' : "center", 'display':'block','margin-top':'20px','width':'36vw','touch-action': 'manipulation'})
 
 abutton1 = dbc.Button('A',id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
 
@@ -355,7 +355,7 @@ cbutton1 = dbc.Button('C',id = 'c-button-1',n_clicks=0, color = 'warning', style
 dbutton1 = dbc.Button('D',id = 'd-button-1',n_clicks=0, color = 'success', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
 
 numberinput = dcc.Input(id = 'number-input', type = 'number', placeholder = "X", max = '100', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'15px'})
-                   
+
 impostorguess = dcc.Dropdown(id = 'impostor-dropdown', options = [{'label': survey_participants.iloc[i], 'value' : survey_participants.iloc[i]} for i in range(len(survey_participants))], style = {'textAlign':'center','display':'block','margin-left':'auto','margin-right':'auto','width':'80%','margin-top':'15px'})
 
 quitbutton = dbc.Button('Quit',id = 'quit-button', href = "/", color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px','width':'75vw', 'height':'10vh'})
@@ -399,21 +399,21 @@ check_submissions_interval = dcc.Interval(id = 'check-submissions-interval', int
 
 update_leaderboard_interval = dcc.Interval(id = 'update-leaderboard-interval', interval = 5000, n_intervals = 0)
 
-instructorname = dcc.Input(id = 'instructor-name-input', type = 'text', placeholder = "Enter Name", maxLength = '10', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'15px'})
+instructorname = dcc.Input(id = 'instructor-name-input', type = 'text', placeholder = "Enter Name", maxLength = '10', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'15px','touch-action': 'manipulation'})
 
-impostorselect = dbc.Button('Impostor', id = 'impostor-select',n_clicks=0, color = 'dark', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px'})
+impostorselect = dbc.Button('Impostor', id = 'impostor-select',n_clicks=0, color = 'dark', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px','touch-action': 'manipulation'})
 
-icebreakerselect = dbc.Button('Icebreaker', id = 'icebreaker-select',n_clicks=0, color = 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px'})
+icebreakerselect = dbc.Button('Icebreaker', id = 'icebreaker-select',n_clicks=0, color = 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px','touch-action': 'manipulation'})
 
-tugofwarselect = dbc.Button('Tug of War', id = 'tugofwar-select',n_clicks=0, color = 'secondary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px'})
+tugofwarselect = dbc.Button('Tug of War', id = 'tugofwar-select',n_clicks=0, color = 'secondary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px','touch-action': 'manipulation'})
 
-bullseyeselect = dbc.Button('Bullseye', id = 'bullseye-select',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px'})
+bullseyeselect = dbc.Button('Bullseye', id = 'bullseye-select',n_clicks=0, color = 'warning', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','width':'66%','margin-right':'auto','margin-top':'20px','touch-action': 'manipulation'})
 
 nemsg = html.H6(children = ['Please enter your name'], style = {'textAlign' : 'center','margin-top':'30px','color':'red'})
 
-moveonbutton_re = dbc.Button('Move On -->', id = 'moveon-button-to-rest',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+moveonbutton_re = dbc.Button('Move On -->', id = 'moveon-button-to-rest',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px','touch-action': 'manipulation'})
 
-moveonbutton_ex = dbc.Button('Move On -->', id = 'moveon-button-to-exercise',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px'})
+moveonbutton_ex = dbc.Button('Move On -->', id = 'moveon-button-to-exercise',n_clicks=0, color= 'info', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto','margin-top':'20px','touch-action': 'manipulation'})
 
 hidden_moveonbutton_ex = dbc.Button(id = 'moveon-button-to-exercise', style = {'display':'none'})
 
@@ -450,7 +450,7 @@ Default Page Layouts
 """
 
 def Homepage():
-    layout = [navbar, 
+    layout = [navbar,
                 dbc.Row([
                     dbc.Col([headerdiv,
                              maindiv,
@@ -460,7 +460,7 @@ def Homepage():
               ]
     return layout
 
-                        
+
 def Instructor():
     layout = html.Div([navbar,
                        dbc.Row([
@@ -471,9 +471,9 @@ def Instructor():
                     ])
     ])
     return layout
-    
+
 def Workout():
-    layout = [navbar, 
+    layout = [navbar,
                 dbc.Row([
                     dbc.Col([headerdiv1,
                              maindiv1,
@@ -485,7 +485,7 @@ def Workout():
     return layout
 
 def InstructorWorkout():
-    layout = [navbar, 
+    layout = [navbar,
                 dbc.Row([
                     dbc.Col([headerdiv3,
                              maindiv3,
@@ -501,8 +501,8 @@ Update functions for default layouts based on current state
 """
 def update_survey_results():
     global surveyresults
-    surveyresults = GetSurvey() 
-    
+    surveyresults = GetSurvey()
+
 def update_inputs(codein):
     if codein in sessioninfo.keys():
         headerlayout = [header2]
@@ -516,7 +516,7 @@ def update_inputs(codein):
         headerlayout = [header1]
         mainlayout = [codeinput,enterbutton]
         hidden = []
-        
+
     return headerlayout, mainlayout, hidden
 
 def instructor_setup(sessiontype,name):
@@ -525,7 +525,7 @@ def instructor_setup(sessiontype,name):
             code = generate_code()
             while code in sessioninfo.keys():
                 code = generate_code()              #ensuring no duplicate code is produced
-                    
+
             sessioninfo[code] = {'Instructor':name,'Workout Type':sessiontype,'Structure': {'inputs' : {'index' : {0 : {'Exercise': 'Inputs'}}}}, 'Current Index':0, 'Current State': 'Exercise', 'Participants':[],'Teamscores':{'A':0,'B':0}} #note the a/b thing can change based on the survey we create, and the inputs will affect the team types (user can chooose what to split by somehow, needs development)
             header = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [name], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -566,7 +566,7 @@ def workout_structure(code):
             generate_ab_patterns(structure)
             generate_questions(structure,session_users)
             sessioninfo[code]['Structure'] = structure
-            
+
 def finalize_participants(code,structure):
     if code:
         sessionparticipants = []
@@ -574,9 +574,9 @@ def finalize_participants(code,structure):
 
             structure['leaderboard']['participants'][i] = sessioninfo[code]['Participants'][i]['Name']
             sessionparticipants.append(sessioninfo[code]['Participants'][i]['Name'])
-            
+
         return sessionparticipants
-        
+
 def generate_ab_patterns(structure, size = 5, chars = 'AB'):
     for i in structure['abinput']['index'].keys():
         target = 'Pattern'
@@ -589,21 +589,21 @@ def generate_questions(structure,session_users):
     for i in structure['abcdinput']['index'].keys():
         target = headers[r.randint(4,len(headers)-1)]
         possibleoptions = surveyresults[target].unique()
-        
+
         targetindex = r.randint(0,len(surveyresults)-1)
         targetplayer = surveyresults.loc[targetindex,'First Name']
-        
+
         while targetplayer not in session_users:
              targetindex = r.randint(0,len(surveyresults)-1)
              targetplayer = surveyresults.loc[targetindex,'First Name']
-            
+
         correct = surveyresults.loc[targetindex,target]
-        
+
         while len(possibleoptions) == 1:
             target = headers[r.randint(4,len(headers)-1)]
             possibleoptions = surveyresults[target].unique()
             correct = surveyresults.loc[targetindex,target]
-        
+
         if len(possibleoptions) == 2:
             ABCD = ['A','B']
             location = ABCD.pop(r.randint(0,len(ABCD)-1))
@@ -616,7 +616,7 @@ def generate_questions(structure,session_users):
                     toadd = possibleoptions[r.randint(0,len(possibleoptions)-1)]
                 location1 = ABCD.pop(r.randint(0,len(ABCD)-1))
                 options[location1] = toadd
-        
+
         elif len(possibleoptions) == 3:
             ABCD = ['A','B','C']
             location = ABCD.pop(r.randint(0,len(ABCD)-1))
@@ -629,7 +629,7 @@ def generate_questions(structure,session_users):
                     toadd = possibleoptions[r.randint(0,len(possibleoptions)-1)]
                 location1 = ABCD.pop(r.randint(0,len(ABCD)-1))
                 options[location1] = toadd
-                
+
         elif len(possibleoptions) >= 4:
             ABCD = ['A','B','C','D']
             location = ABCD.pop(r.randint(0,len(ABCD)-1))
@@ -641,13 +641,13 @@ def generate_questions(structure,session_users):
                 while toadd in options.values():
                     toadd = possibleoptions[r.randint(0,len(possibleoptions)-1)]
                 location1 = ABCD.pop(r.randint(0,len(ABCD)-1))
-                options[location1] = toadd       
-                
+                options[location1] = toadd
+
         structure['abcdinput']['index'][i]['Target'] = target
         structure['abcdinput']['index'][i]['Target Player'] = targetplayer
         structure['abcdinput']['index'][i]['Answer'] = answer
         structure['abcdinput']['index'][i]['Options'] = options
-       
+
 def enter_session(code,name):
     if code:
         sessioninfo[code]['Participants'].append({'Name':name,'Team':'','Scores':{},'Total Score':0})
@@ -656,9 +656,9 @@ def update_participants_body(code):
     if len(sessioninfo[code]['Participants']) > 0:
         body =  [[html.Tr([
                 html.Td(sessioninfo[code]['Participants'][i]['Name'])
-                ]) for i in range(len(sessioninfo[code]['Participants']))]]    
+                ]) for i in range(len(sessioninfo[code]['Participants']))]]
     else:
-        body = [[html.Tr([html.Td('Waiting For Participants')])]]   
+        body = [[html.Tr([html.Td('Waiting For Participants')])]]
     return body
 
 def get_index(code):
@@ -667,7 +667,7 @@ def get_index(code):
         return index
     else:
         return 0
-    
+
 def update_index(code):
     if code:
         sessioninfo[code]['Current Index'] += 1
@@ -688,7 +688,7 @@ def state_to_exercise(code):
         return sessioninfo[code]['Current State']
     else:
         return sessioninfo[code]['Current State']
-    
+
 def update_instructor_workout(index, newstate, code):
     structure = sessioninfo[code]['Structure']
     for i in structure.keys():
@@ -702,7 +702,7 @@ def update_instructor_workout(index, newstate, code):
                 exercisetype = None
         if int(j) == int(index):
             break
-    participanttable = participant_table(code) 
+    participanttable = participant_table(code)
     leaderboard = leader_board(code)
     if screentype == 'inputs':
         headerlayout = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -711,7 +711,7 @@ def update_instructor_workout(index, newstate, code):
                       html.H4(children = [sessioninfo[code]['Workout Type']], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [participanttable,moveonbutton_ex,check_participant_interval,hidden_moveonbutton_re]
         scorelayout = []
-        
+
     elif screentype == 'warmup':
         headerlayout = Warmcool(index,structure)
         if structure['warmup']['index'][index]['Exercise'] in ['Warmup','Halfway']:
@@ -719,12 +719,12 @@ def update_instructor_workout(index, newstate, code):
         elif structure['warmup']['index'][index]['Exercise'] == 'Cooldown':
             mainlayout = [quitbutton]
         scorelayout =[]
-        
+
     elif screentype == 'leaderboard':
         headerlayout = [html.H6(children = [structure['leaderboard']['index'][index]['Exercise']], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [leaderboard,moveonbutton_ex,hidden_moveonbutton_re]
         scorelayout = []
-        
+
     elif screentype == 'numinput':
         if newstate == 'Exercise':
             headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
@@ -734,7 +734,7 @@ def update_instructor_workout(index, newstate, code):
             headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
             mainlayout = [numberinput,moveonbutton_ex,hidden_moveonbutton_re,check_submissions_interval]
             scorelayout = []
-            
+
     elif screentype == 'abinput':
         target = structure['abinput']['index'][index]['Target']
         answer = structure['abinput']['index'][index]['Answer']
@@ -755,7 +755,7 @@ def update_instructor_workout(index, newstate, code):
                       html.H6(id = 'total-answers', children = [check_total_answers(code)], style = {'textAlign' : "center",'margin-top':'30px'}),
                       moveonbutton_ex, hidden_moveonbutton_re,check_submissions_interval]
             scorelayout = []
-        
+
     elif screentype == 'abcdinput':
         target = structure['abcdinput']['index'][index]['Target']
         targetplayer = structure['abcdinput']['index'][index]['Target Player']
@@ -779,13 +779,13 @@ def update_instructor_workout(index, newstate, code):
                             html.H6(id = 'total-answers', children = [check_total_answers(code)], style = {'textAlign' : "center",'margin-top':'30px'})]
             mainlayout = [moveonbutton_ex, hidden_moveonbutton_re,check_submissions_interval]
             scorelayout = []
-            
+
     elif screentype == 'impostorinput':
         headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'}),
                         html.H6(id = 'total-answers', children = [check_total_answers(code)], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [impostorguess,moveonbutton_ex,hidden_moveonbutton_re,check_submissions_interval]
         scorelayout = []
-            
+
     elif screentype == 'intenseburst':
         if newstate == 'Exercise':
             headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -797,7 +797,7 @@ def update_instructor_workout(index, newstate, code):
                             html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'})]
             mainlayout = [moveonbutton_ex,hidden_moveonbutton_re]
             scorelayout = []
-        
+
     else:
         headerlayout = []
         mainlayout = [participanttable,moveonbutton_ex,hidden_moveonbutton_re]
@@ -823,8 +823,8 @@ def update_workout(code,name):
         if sessioninfo[code]['Participants'][i]['Name'] == name:
             partindex = i
             break
-        
-    participanttable = participant_table(code)  
+
+    participanttable = participant_table(code)
     leaderboard = leader_board(code)
     if screentype == 'inputs':
         headerlayout = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -833,7 +833,7 @@ def update_workout(code,name):
                       html.H4(children = [sessioninfo[code]['Workout Type']], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [participanttable,update_exercise_interval]
         scorelayout = []
-        
+
     elif screentype == 'warmup':
         headerlayout = Warmcool(index,structure)
         if structure['warmup']['index'][index]['Exercise'] in ['Warmup','Halfway']:
@@ -841,12 +841,12 @@ def update_workout(code,name):
         elif structure['warmup']['index'][index]['Exercise'] == 'Cooldown':
             mainlayout = [quitbutton]
         scorelayout =[]
-        
+
     elif screentype == 'leaderboard':
         headerlayout = [html.H6(children = [structure['leaderboard']['index'][index]['Exercise']], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [update_exercise_interval, leaderboard]
         scorelayout = []
-        
+
     elif screentype == 'numinput':
         create_score_entry(code,name)
         if state == 'Exercise':
@@ -870,7 +870,7 @@ def update_workout(code,name):
                                 html.H4(children = ['Enter your number below:'], style = {'textAlign' : "center",'margin-top':'30px'})]
                 mainlayout = [update_exercise_interval, numberinput]
                 scorelayout = [html.Div(id = 'score', style = {'display':'none'})]
-                
+
     elif screentype == 'abinput':
         create_score_entry(code,name)
         target = structure['abinput']['index'][index]['Target']
@@ -891,7 +891,7 @@ def update_workout(code,name):
                                 ]
                 mainlayout = [update_exercise_interval]
                 scorelayout = []
-                
+
             elif sessioninfo[code]['Participants'][partindex]['Scores'][index]['Answered'] == 1 and sessioninfo[code]['Participants'][partindex]['Scores'][index]['Score'] == 0:
                 headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
                                 html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -901,7 +901,7 @@ def update_workout(code,name):
                                 ]
                 mainlayout = [update_exercise_interval]
                 scorelayout = []
-                
+
             else:
                 headerlayout = [html.H6(children = ['Master your Memory'], style = {'textAlign' : "center",'margin-top':'30px'}),
                                 html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -910,7 +910,7 @@ def update_workout(code,name):
                               html.H4(id = 'show-user-pattern', children = [update_ab_pattern(0,code,name)], style = {'textAlign' : "center",'margin-top':'30px'}),
                               dbc.Row([dbc.Col([abutton,clearbutton]),dbc.Col([bbutton,submitbutton])]),update_exercise_interval]
                 scorelayout = [html.Div(id = 'score', style = {'display':'none'})]
-            
+
     elif screentype == 'abcdinput':
         create_score_entry(code,name)
         target = structure['abcdinput']['index'][index]['Target']
@@ -923,7 +923,7 @@ def update_workout(code,name):
                             html.H6(children = ['What did ', targetplayer, ' answer?'], style = {'textAlign' : "center",'margin-top':'30px'})]
             mainlayout = [update_exercise_interval]
             scorelayout = []
-            
+
         elif state == 'Rest':
             if sessioninfo[code]['Participants'][partindex]['Scores'][index]['Answered'] == 1 and sessioninfo[code]['Participants'][partindex]['Scores'][index]['Score'] > 0:
                 headerlayout = [html.H6(children = ['Workout Buddies'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -946,38 +946,38 @@ def update_workout(code,name):
                                 html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'}),
                                 html.H6(children = [target], style = {'textAlign' : "center",'margin-top':'30px'}),
                                 html.H6(children = ['What did ', targetplayer, ' answer?'], style = {'textAlign' : "center",'margin-top':'30px'})]
-                if len(options) == 2: 
-                    mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
+                if len(options) == 2:
+                    mainlayout = [dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'}),
+                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'}),
                                   dbc.Button(id = 'c-button-1',n_clicks=0, style = {'display' : 'none'}),
                                   dbc.Button(id = 'd-button-1',n_clicks=0, style = {'display' : 'none'}),
                                   update_exercise_interval]
                 elif len(options) == 3:
-                    mainlayout = [dbc.Row([dbc.Col([dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'})
+                    mainlayout = [dbc.Row([dbc.Col([dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'}),
+                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'})
                                   ]),
-                                  dbc.Col([dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['D'],id = 'd-button-1',n_clicks=0, style = {'display':'none'})
+                                  dbc.Col([dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'}),
+                                  dbc.Button(id = 'd-button-1',n_clicks=0, style = {'display':'none'})
                                   ])]),
                                   update_exercise_interval]
                 elif len(options) == 4:
-                    mainlayout = [dbc.Row([dbc.Col([dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'})
+                    mainlayout = [dbc.Row([dbc.Col([dbc.Button(options['A'],id = 'a-button-1',n_clicks=0, color = 'danger', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'}),
+                                  dbc.Button(options['B'],id = 'b-button-1',n_clicks=0, color = 'primary', className="ml-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'})
                                   ]),
-                                  dbc.Col([dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'}),
-                                  dbc.Button(options['D'],id = 'd-button-1',n_clicks=0, color = 'success', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh'})
+                                  dbc.Col([dbc.Button(options['C'],id = 'c-button-1',n_clicks=0, color = 'warning', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'}),
+                                  dbc.Button(options['D'],id = 'd-button-1',n_clicks=0, color = 'success', className="mr-auto", style = {'textAlign' : "center", 'display':'block','margin-left':'auto','margin-right':'auto', 'margin-top':'20px', 'width':'45vw', 'height':'10vh','touch-action': 'manipulation'})
                                   ])]),
-                                  update_exercise_interval] 
+                                  update_exercise_interval]
                 else:
                     mainlayout = [update_exercise_interval]
                 scorelayout = [html.Div(id = 'score-abcd', style = {'display':'none'})]
-        
+
     elif screentype == 'impostorinput':
         create_score_entry(code,name)
         headerlayout = [html.H4(children = [exercisetype], style = {'textAlign' : "center",'margin-top':'30px'})]
         mainlayout = [impostorguess,update_exercise_interval]
         scorelayout = []
-        
+
     elif screentype == 'intenseburst':
         if state == 'Exercise':
             headerlayout = [html.H6(children = ['Intense Burst'], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -989,7 +989,7 @@ def update_workout(code,name):
                             html.H4(children = ['Rest'], style = {'textAlign' : "center",'margin-top':'30px'})]
             mainlayout = [update_exercise_interval]
             scorelayout = []
-        
+
     else:
         headerlayout = []
         mainlayout = [participanttable,update_exercise_interval]
@@ -1007,7 +1007,7 @@ def create_score_entry(code,name):
             pass
     except KeyError:
         sessioninfo[code]['Participants'][partindex]['Scores'][index] =  {'Entry':'','Score':0,'Answered':0}
-    
+
 def update_ab_pattern(button,code,name):
     index = sessioninfo[code]['Current Index']
     if code:
@@ -1017,7 +1017,7 @@ def update_ab_pattern(button,code,name):
                 break
         pattern = sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry']
     if button == 'A' and len(pattern) < 5:
-        pattern+='A' 
+        pattern+='A'
         sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
         return pattern
     elif button == 'B' and len(pattern) < 5:
@@ -1033,7 +1033,7 @@ def update_ab_pattern(button,code,name):
             return 'Tap A/B!'
         else:
             return pattern
-               
+
 def check_answer_submit(code,name):
     index = sessioninfo[code]['Current Index']
     structure = sessioninfo[code]['Structure']
@@ -1042,7 +1042,7 @@ def check_answer_submit(code,name):
             partindex = i
             break
     partans = sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry']
-    sessioninfo[code]['Participants'][partindex]['Scores'][index]['Answered'] = 1   
+    sessioninfo[code]['Participants'][partindex]['Scores'][index]['Answered'] = 1
     for i in structure.keys():
         for j in structure[i]['index'].keys():
             if int(j) == int(index):
@@ -1052,10 +1052,10 @@ def check_answer_submit(code,name):
                 screentype = 'initial'
         if int(j) == int(index):
             break
-        
+
     if screentype == 'numinput':
         pass
-        
+
     elif screentype == 'abinput':
         answer = structure['abinput']['index'][index]['Answer']
         if partans == answer:
@@ -1063,13 +1063,13 @@ def check_answer_submit(code,name):
             update_current_score(partindex,code)
         else:
             update_current_score(partindex,code)
-            
+
     elif screentype == 'impostorinput':
         answer = structure['impostorinput']['index'][index]['Answer']
         update_current_score(partindex,code)
     else:
         pass
-    
+
 def check_answer_abcd(button,code,name):
     index = sessioninfo[code]['Current Index']
     structure = sessioninfo[code]['Structure']
@@ -1084,17 +1084,17 @@ def check_answer_abcd(button,code,name):
     if partans == answer:
         sessioninfo[code]['Participants'][partindex]['Scores'][index]['Score'] = 1
         update_current_score(partindex,code)
-    else: 
+    else:
         update_current_score(partindex,code)
-        
+
 def update_current_score(partindex,code):
     scores = []
     for i in sessioninfo[code]['Participants'][partindex]['Scores'].keys():
         scores.append(sessioninfo[code]['Participants'][partindex]['Scores'][i]['Score'])
-        
+
     totalscore = sum(scores)
     sessioninfo[code]['Participants'][partindex]['Total Score'] = totalscore
-    
+
 def check_total_answers(code):
     index = sessioninfo[code]['Current Index']
     totalpeople = len(sessioninfo[code]['Participants'])
@@ -1103,7 +1103,7 @@ def check_total_answers(code):
         return '{}/{} Answered'.format(totalanswers,totalpeople)
     else:
         return 'No Participants in Session'
-    
+
 def update_leaderboard(code,name):
     totalpeople = len(sessioninfo[code]['Participants'])
     if totalpeople > 0:
@@ -1188,7 +1188,7 @@ def update_instructor_leaderboard(code):
                                         ])
                                     ], id = 'live-leaderboard')
             return leaderboard
-       
+
     else:
         leaderboard = html.Tbody(children = [
                                 html.Tr([
@@ -1196,5 +1196,5 @@ def update_instructor_leaderboard(code):
                                     ])
                                 ], id = 'live-leaderboard')
         return leaderboard
-    
+
 
