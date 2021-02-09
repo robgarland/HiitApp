@@ -16,7 +16,7 @@ import pandas as pd
 from app import Homepage, Instructor, Workout, InstructorWorkout, update_inputs, instructor_setup, workout_structure, enter_session, update_participants_body, update_instructor_workout, update_index, get_index, state_to_rest, state_to_exercise, update_workout, update_ab_pattern, check_answer_submit, check_answer_abcd, check_total_answers, update_leaderboard, update_instructor_leaderboard
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],meta_tags=[{'name' : 'viewport',
-                                                                                  'content' : 'width = device-width, initial-scale = 1.0, maximum-scale = 1.2, minimumscale = 0.8'}])
+                                                                                  'content' : 'width = device-width, initial-scale = 1.0, maximum-scale = 1.0, minimumscale = 1.0, touch-action=manipulation'}])
 
 app.config.suppress_callback_exceptions = True
 
@@ -32,7 +32,7 @@ app.layout = html.Div([
     html.Div(id = 'hidden-div-3',
                 style = {'display':'none'}
                 )
-    
+
 ])
 
 
@@ -67,8 +67,8 @@ def display_page(pathname):
               [State('code-input','value')])
 def input_updater(n_clicks,codein):
 
-    header, main, hidden = update_inputs(codein)     
-           
+    header, main, hidden = update_inputs(codein)
+
     return header, main, hidden
 
 @app.callback([Output('header-div-2', 'children'),
@@ -78,7 +78,7 @@ def input_updater(n_clicks,codein):
                 [Input('icebreaker-select','n_clicks'),
                  Input('impostor-select','n_clicks')],
                 [State('instructor-name-input','value')])
-def instructor_session_setup(n_clicks_1,n_clicks_2,name):    
+def instructor_session_setup(n_clicks_1,n_clicks_2,name):
     if n_clicks_1 == 0 and n_clicks_2 == 0:
         raise PreventUpdate
     else:
@@ -93,11 +93,11 @@ def instructor_session_setup(n_clicks_1,n_clicks_2,name):
             return header, main, score, hidden
         else:
             raise PreventUpdate
-    
+
 @app.callback([Output('hidden-div-3','children'),
                Output('url','pathname')],
               [Input('start-button', 'n_clicks')],
-              [State('url','pathname'), State('name-dropdown','value'), State('hidden-div-1','children'), State('hidden-div-2','children')])    
+              [State('url','pathname'), State('name-dropdown','value'), State('hidden-div-1','children'), State('hidden-div-2','children')])
 def store_details_next_path(n_clicks,path,name,usrcode,inscode):
     if n_clicks == 0:
         raise PreventUpdate
@@ -108,7 +108,7 @@ def store_details_next_path(n_clicks,path,name,usrcode,inscode):
             newpath = "/instructor/workout"
             return children, newpath
         else:
-            if name:      
+            if name:
                 children = [name]
                 enter_session(usrcode[0], name)
                 newpath = "/workout"
@@ -130,7 +130,7 @@ def update_participants_table(n_intervals,usrcode,inscode):
             return children
         else:
             raise PreventUpdate
-    
+
 @app.callback([Output('header-div-3', 'children'),
                 Output('main-div-3', 'children'),
                 Output('score-div-3', 'children'),
@@ -149,7 +149,7 @@ def update_instructor_exercise(n_clicks_1,n_clicks_2,inscode):
             newstate = state_to_rest(inscode[0])
             header, main, score = update_instructor_workout(current_index,newstate,inscode[0])
             children = update_instructor_leaderboard(inscode[0])
-            
+
     elif 'moveon-button-to-exercise' in changed_id:
         if n_clicks_1 and n_clicks_2 == 0:
             header, main, score = update_instructor_workout(0,'Exercise',inscode[0])
@@ -161,7 +161,7 @@ def update_instructor_exercise(n_clicks_1,n_clicks_2,inscode):
             children = update_instructor_leaderboard(inscode[0])
     else:
         raise PreventUpdate
-        
+
     return header, main, score, children
 
 @app.callback([Output('header-div-1', 'children'),
@@ -211,7 +211,7 @@ def check_answer_from_submit(n_clicks,usrcode,name):
     else:
         check_answer_submit(usrcode[0],name[0])
         return []
-    
+
 @app.callback(Output('score-abcd','children'),
               [Input('a-button-1','n_clicks'),
                 Input('b-button-1','n_clicks'),
@@ -238,17 +238,17 @@ def check_answer_from_abcd(n_clicks_1,n_clicks_2,n_clicks_3,n_clicks_4,usrcode,n
             return []
         else:
             raise PreventUpdate
-    
+
 @app.callback(Output('total-answers','children'),
                [Input('check-submissions-interval','n_intervals')],
                [State('hidden-div-2','children')])
-def update_leader_board(n_intervals,inscode):    
+def update_leader_board(n_intervals,inscode):
     if n_intervals == 0:
         raise PreventUpdate
     else:
         children = check_total_answers(inscode[0])
         return children
-    
+
 @app.callback(Output('live-leaderboard','children'),
               [Input('update-leaderboard-interval','n_intervals')],
               [State('url','pathname'), State('hidden-div-1','children'), State('hidden-div-2','children'),State('hidden-div-3','children')])
@@ -262,7 +262,7 @@ def update_live_leaderboard(n_intervals,path,usrcode,inscode,name):
         else:
             children = update_instructor_leaderboard(inscode[0])
             return children
-    
-    
+
+
 if __name__ == '__main__':
     app.run_server(debug=True)
