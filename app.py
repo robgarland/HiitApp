@@ -270,31 +270,101 @@ def CreatePosition(scores):
             scores[ix].append('{}{}'.format(ix - cur_count + 1,suf))
     return scores
 
-def leader_board(code):
+def leader_board(code, name = 'instructor'):
     totalpeople = len(sessioninfo[code]['Participants'])
+        
     if totalpeople > 0:
-        participants_scores = [[sessioninfo[code]['Participants'][i]['Name'],sessioninfo[code]['Participants'][i]['Total Score']] for i in range(totalpeople)]
-        participants_scores.sort(key = TakeSecond,reverse = True)
+        if name == 'instructor':
+            participants_scores = [[sessioninfo[code]['Participants'][i]['Name'],sessioninfo[code]['Participants'][i]['Total Score']] for i in range(totalpeople)]
+            participants_scores.sort(key = TakeSecond,reverse = True)
+            
+            participants_scores = CreatePosition(participants_scores)
 
-        participants_scores = CreatePosition(participants_scores)
-        leaderboard = html.Table(children = [
-        html.Thead(
-            html.Tr([html.Th('Pos', style={'padding-left': '15px', 'padding-right': '15px'}),
-                     html.Th('Name', style={'padding-left': '15px', 'padding-right': '15px'}),
-                     html.Th('Score', style={'padding-left': '15px', 'padding-right': '15px'})
-                     ]
-                )
-            ),
-        html.Tbody(
-            children = [html.Tr([
-                html.Td(participants_scores[i][2]),
-                html.Td(participants_scores[i][0]),
-                html.Td(participants_scores[i][1])
-                ]) for i in range(totalpeople)], id = 'leaderboard-participants'
-            )
-        ], style = {'textAlign' : "center",'margin-left':'auto','margin-right':'auto', 'margin-top':'30px'})
-        return leaderboard
+            if totalpeople < 5:
+                leaderboard = html.Table(children = [
+                    html.Thead(
+                        html.Tr([html.Th('Pos', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Name', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Score', style={'padding-left': '15px', 'padding-right': '15px'})
+                                 ])
+                        ),
+                    html.Tbody(children = [
+                        html.Tr([html.Td(participants_scores[i][2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
+                                 ]) for i in range(totalpeople)
+                        ], id = 'leaderboard-participants')
+                    ], style = {'textAlign' : "center",'margin-left':'auto','margin-right':'auto', 'margin-top':'30px'})
+                return leaderboard
 
+            else:
+
+                leaderboard = html.Table(children = [
+                    html.Thead(
+                        html.Tr([html.Th('Pos', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Name', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Score', style={'padding-left': '15px', 'padding-right': '15px'})
+                                 ])
+                        ),
+                    html.Tbody(children = [
+                        html.Tr([html.Td(participants_scores[i][2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
+                                 ]) for i in range(5)
+                        ], id = 'leaderboard-participants')
+                    ], style = {'textAlign' : "center",'margin-left':'auto','margin-right':'auto', 'margin-top':'30px'})
+                return leaderboard
+        else:
+            participants_scores = [[sessioninfo[code]['Participants'][i]['Name'],sessioninfo[code]['Participants'][i]['Total Score']] for i in range(totalpeople)]
+            participants_scores.sort(key = TakeSecond,reverse = True)
+                
+            participants_scores = CreatePosition(participants_scores)
+
+            for i in range(len(sessioninfo[code]['Participants'])):
+                if sessioninfo[code]['Participants'][i]['Name'] == name:
+                    player = participants_scores[i]
+                    break
+                
+            if totalpeople < 5:
+                mainbody = [html.Tr([html.Td(participants_scores[i][2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
+                                 ]) for i in range(totalpeople)]
+                playerbody = html.Tr([html.Td(player[2],style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Td('You',style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Td(player[1],style={'padding-left': '15px', 'padding-right': '15px'})
+                                 ])
+                mainbody.append(playerbody)
+                leaderboard = html.Table(children = [
+                    html.Thead(
+                        html.Tr([html.Th('Pos', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Name', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Score', style={'padding-left': '15px', 'padding-right': '15px'})
+                                 ])
+                        ),
+                    html.Tbody(children = mainbody, id = 'leaderboard-participants')
+                    ], style = {'textAlign' : "center",'margin-left':'auto','margin-right':'auto', 'margin-top':'30px'})
+                return leaderboard
+            else:
+                mainbody = [html.Tr([html.Td(participants_scores[i][2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                 html.Td(participants_scores[i][1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
+                                 ]) for i in range(5)]
+                playerbody = html.Tr([html.Td(player[2],style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Td('You',style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Td(player[1],style={'padding-left': '15px', 'padding-right': '15px'})
+                                 ])
+                mainbody.append(playerbody)
+                leaderboard = html.Table(children = [
+                    html.Thead(
+                        html.Tr([html.Th('Pos', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Name', style={'padding-left': '15px', 'padding-right': '15px'}),
+                                 html.Th('Score', style={'padding-left': '15px', 'padding-right': '15px'})
+                                 ])
+                        ),
+                    html.Tbody(children = mainbody, id = 'leaderboard-participants')
+                    ], style = {'textAlign' : "center",'margin-left':'auto','margin-right':'auto', 'margin-top':'30px'})
+                return leaderboard
     else:
         leaderboard = html.Table(children = [
         html.Thead(
@@ -577,7 +647,7 @@ def finalize_participants(code,structure):
 
         return sessionparticipants
 
-def generate_ab_patterns(structure, size = 5, chars = 'AB'):
+def generate_ab_patterns(structure, size = 7, chars = 'AB'):
     for i in structure['abinput']['index'].keys():
         target = 'Pattern'
         answer = ''.join(r.choice(chars) for _ in range(size))
@@ -825,7 +895,7 @@ def update_workout(code,name):
             break
 
     participanttable = participant_table(code)
-    leaderboard = leader_board(code)
+    leaderboard = leader_board(code, name)
     if screentype == 'inputs':
         headerlayout = [html.H6(children = ['Instructor Name:'], style = {'textAlign' : "center",'margin-top':'30px'}),
                       html.H4(children = [sessioninfo[code]['Instructor']], style = {'textAlign' : "center",'margin-top':'30px'}),
@@ -1010,17 +1080,21 @@ def create_score_entry(code,name):
 
 def update_ab_pattern(button,code,name):
     index = sessioninfo[code]['Current Index']
+    answerlen = len(sessioninfo[code]['Structure']['abinput']['index'][index]['Answer'])
     if code:
         for i in range(len(sessioninfo[code]['Participants'])):
             if sessioninfo[code]['Participants'][i]['Name'] == name:
                 partindex = i
                 break
-        pattern = sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry']
-    if button == 'A' and len(pattern) < 5:
+        try:
+            pattern = sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry']
+        except KeyError:
+            pattern = ''
+    if button == 'A' and len(pattern) < answerlen:
         pattern+='A'
         sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
         return pattern
-    elif button == 'B' and len(pattern) < 5:
+    elif button == 'B' and len(pattern) < answerlen:
         pattern+='B'
         sessioninfo[code]['Participants'][partindex]['Scores'][index]['Entry'] = pattern
         return pattern
@@ -1099,7 +1173,10 @@ def check_total_answers(code):
     index = sessioninfo[code]['Current Index']
     totalpeople = len(sessioninfo[code]['Participants'])
     if totalpeople > 0:
-        totalanswers = sum([sessioninfo[code]['Participants'][i]['Scores'][index]['Answered'] for i in range(totalpeople)])
+        try:
+            totalanswers = sum([sessioninfo[code]['Participants'][i]['Scores'][index]['Answered'] for i in range(totalpeople)])
+        except KeyError:
+            totalanswers = 0
         return '{}/{} Answered'.format(totalanswers,totalpeople)
     else:
         return 'No Participants in Session'
@@ -1142,50 +1219,22 @@ def update_instructor_leaderboard(code):
         participants_scores = [[sessioninfo[code]['Participants'][i]['Name'],sessioninfo[code]['Participants'][i]['Total Score']] for i in range(totalpeople)]
         participants_scores.sort(key = TakeSecond,reverse = True)
         participants_scores = CreatePosition(participants_scores)
-        leader = participants_scores[0]
-        if totalpeople == 1:
+        if totalpeople < 3:
             leaderboard = html.Tbody(children = [
                                     html.Tr([
-                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
-                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
-                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
-                                        ])
-                                    ], id = 'live-leaderboard')
-            return leaderboard
-        elif totalpeople == 2:
-            second = participants_scores[1]
-            leaderboard = html.Tbody(children = [
-                                    html.Tr([
-                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
-                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
-                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
-                                        ]),
-                                    html.Tr([
-                                        html.Td(second[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(second[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(second[1],style={'padding-left': '15px', 'padding-right': '15px'})
-                                        ])
+                                        html.Td(participants_scores[i][2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(participants_scores[i][0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(participants_scores[i][1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
+                                        ]) for i in range(totalpeople)
                                     ], id = 'live-leaderboard')
             return leaderboard
         else:
-            second = participants_scores[1]
-            third = participants_scores[2]
             leaderboard = html.Tbody(children = [
                                     html.Tr([
-                                        html.Td(leader[2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
-                                        html.Td(leader[0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
-                                        html.Td(leader[1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
-                                        ]),
-                                    html.Tr([
-                                        html.Td(second[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(second[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(second[1],style={'padding-left': '15px', 'padding-right': '15px'})
-                                        ]),
-                                    html.Tr([
-                                        html.Td(third[2],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(third[0],style={'padding-left': '15px', 'padding-right': '15px'}),
-                                        html.Td(third[1],style={'padding-left': '15px', 'padding-right': '15px'})
-                                        ])
+                                        html.Td(participants_scores[i][2],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(participants_scores[i][0],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'}),
+                                        html.Td(participants_scores[i][1],style={'padding-left': '15px', 'padding-right': '15px', 'color':'#FFD700'})
+                                        ]) for i in range(3)
                                     ], id = 'live-leaderboard')
             return leaderboard
 
