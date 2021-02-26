@@ -1,0 +1,28 @@
+Question,Type,Category,Difficulty,Answer,Options
+Lime Street Station Is In Which English City,Trivia,Geography,Easy,Liverpool,"['Manchester','London','Bristol']"
+Which famous fitness instructor is known as The Body Coach?,Trivia,Sport,Easy,Joe Wicks,"['Annie Lammas', 'Lou Ferrigno',' Gunnar Peterson']"
+The Island Of Fiji Is In Which Ocean?,Trivia,Geography,Easy,Pacific,"['Atlantic','Arctic','Indian']"
+Where would you find the biceps femoris?,Trivia,Science,Easy,Leg,"['Arm','Head','Feet']"
+What Is The 3 rd Letter Of The Greek Alphabet,Trivia,Culture,Easy,Gamma,"['Alpha','Beta','Chi']"
+Where is The Giants Causeway?,Trivia,Geography,Easy,Northern Ireland,"['Ireland', 'Scotland', 'Isle of Man']"
+At which racecourse is the Grand National run?,Trivia,Sport,Hard,Aintree,"['Cheltenham','Ascot','Epsom']"
+What sort of animal is a Dory?,Trivia,Science,Easy,Fish,"['Pig','Dog','Sheep']"
+What is the only gemstone to be composed of one single element?,Trivia,Science,Easy,Diamond,"['Ruby','Sapphire', 'Emerald']"
+How Many Strings Are There On A Spanish Guitar,Trivia,Music,Easy,Six,"['Four','Five','Seven']"
+"Who Said, ""Veni, Vidi, Vici""",Trivia,Histrory,Easy,Julias Caesar,"['Brutus','Augustus','Aristotle'] "
+What Is The Value Of The Roman Symbol C,Trivia,General,Easy,100,"['10','50','1000']"
+Approximately 98% Of The Human Body Is Made Up Of What,Trivia,Science,Easy,Water,"['Carbon','Air', 'Chocolate']"
+Which Sport has had the most films Made about it?,Trivia,Sport,Hard,Boxing,"['Golf','Football','Tennis']"
+What would a French secretary call a paperclip?,Trivia,Culture,Hard,Trombone,"['Trumpet','French Horn','Tuba']"
+On The human body the Hallux Is Otherwise known as what?,Trivia,Science,Hard,The Big Toe,"['Little Finger','Football','Tennis']"
+Which is the oldest University in America?,Trivia,Culture,Hard,Harvard,"['Stanford', 'Yale',' MIT']"
+Which fruit is a hybrid between a Raspberry and a Blackberry?,Trivia,Food,Hard,Loganberry,"['Garyberry', 'Brownberry', 'Annieberry']"
+What is studied by an oologist?,Trivia,Food,Hard,Eggs,"['Cows', 'Goo', 'Birds']"
+What is Europe's most populated capital?,Trivia,Geography,Hard,Istanbul,"['London', 'Paris', 'Moscow']"
+What note does an orchestra tune to?,Trivia,Music,Hard,A,"['B','C','C#']"
+"In the UK, what is the average number of cardio minutes each week? +/- 20",NearestTo,Sport,,71,20
+Approximately what % of your body weight is muscle?,NearestTo,Science,,40,20
+What is the highest finishing score in darts?  +/- 5,NearestTo,Sport,,170,10
+How Many Faces Does A Tetrahedron Have,NearestTo,Math,,4,2
+How many pieces are there in a standard set of dominoes?,NearestTo,Culture,,28,10
+How Many Yards Are There In A Mile,NearestTo,General,,1760,200
