@@ -13,10 +13,10 @@ from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-from app import Homepage, Instructor, Workout, InstructorWorkout, update_inputs, instructor_setup, workout_structure, enter_session, update_participants_body, update_instructor_workout, update_index, get_index, state_to_rest, state_to_exercise, update_workout, update_ab_pattern, check_answer_submit, check_answer_abcd, check_total_answers, update_leaderboard, update_instructor_leaderboard
+from app import Homepage, Instructor, Workout, InstructorWorkout, update_inputs, instructor_setup, workout_structure, enter_session, update_participants_body, update_instructor_workout, update_index, get_index, state_to_rest, state_to_exercise, update_workout, update_ab_pattern, check_answer_submit, check_answer_abcd, check_total_answers, update_leaderboard, update_instructor_leaderboard, question_select, add_number_after_submit
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],meta_tags=[{'name' : 'viewport',
-                                                                                  'content' : 'width = device-width, initial-scale = 1.0, maximum-scale = 1.0, minimumscale = 1.0, touch-action=manipulation'}])
+                                                                                  'content' : 'width = device-width, initial-scale = 1.0, maximum-scale = 1.0, minimumscale = 1.0, touch-action=none'}])
 
 app.config.suppress_callback_exceptions = True
 
@@ -32,7 +32,6 @@ app.layout = html.Div([
     html.Div(id = 'hidden-div-3',
                 style = {'display':'none'}
                 )
-
 ])
 
 
@@ -76,19 +75,25 @@ def input_updater(n_clicks,codein):
                 Output('score-div-2', 'children'),
                 Output('hidden-div-2','children')],
                 [Input('icebreaker-select','n_clicks'),
-                 Input('impostor-select','n_clicks')],
+                 Input('impostor-select','n_clicks'),
+                 Input('tugofwar-select','n_clicks'),
+                 Input('quizup-select','n_clicks'),
+                 Input('memory-select','n_clicks'),
+                 Input('fortune-select','n_clicks')],
                 [State('instructor-name-input','value')])
-def instructor_session_setup(n_clicks_1,n_clicks_2,name):
-    if n_clicks_1 == 0 and n_clicks_2 == 0:
+def instructor_session_setup(n_clicks_1,n_clicks_2,n_clicks_3,n_clicks_4,n_clicks_5,n_clicks_6,name):
+    if n_clicks_1 == 0 and n_clicks_2 == 0 and n_clicks_3 == 0 and n_clicks_4 == 0 and n_clicks_5 == 0 and n_clicks_6 == 0:
         raise PreventUpdate
     else:
         changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
         if 'impostor-select' in changed_id:
             sessiontype = 'Impostor'
-            header, main, score, hidden = instructor_setup(sessiontype, name)
-            return header, main, score, hidden
+            raise PreventUpdate
         elif 'icebreaker-select' in changed_id:
             sessiontype = 'Icebreaker'
+            raise PreventUpdate
+        elif 'quizup-select' in changed_id:
+            sessiontype = 'Quiz Ups'
             header, main, score, hidden = instructor_setup(sessiontype, name)
             return header, main, score, hidden
         else:
@@ -120,12 +125,9 @@ def store_details_next_path(n_clicks,path,name,usrcode,inscode):
 
 @app.callback([Output('current-participants','children')],
               [Input('check-participants-interval','n_intervals')],
-              [State('hidden-div-1','children'), State('hidden-div-2','children')])
-def update_participants_table(n_intervals,usrcode,inscode):
-        if usrcode:
-            children = update_participants_body(usrcode[0])
-            return children
-        elif inscode:
+              [State('hidden-div-2','children')])
+def update_participants_table(n_intervals,inscode):
+        if inscode:
             children = update_participants_body(inscode[0])
             return children
         else:
@@ -204,14 +206,39 @@ def update_ab_input(n_clicks_1,n_clicks_2,n_clicks_3,usrcode,name):
 @app.callback(Output('score','children'),
               [Input('submit-button','n_clicks')],
               [State('hidden-div-1','children'),
-              State('hidden-div-3','children')])
-def check_answer_from_submit(n_clicks,usrcode,name):
+              State('hidden-div-3','children'),
+              State('number-input','value')])
+def check_answer_from_submit(n_clicks,usrcode,name,number):
     if n_clicks == 0:
         raise PreventUpdate
     else:
-        check_answer_submit(usrcode[0],name[0])
-        return []
+        add_number_after_submit(number,usrcode[0],name[0])
+        children = check_answer_submit(usrcode[0],name[0])
+        return children
 
+@app.callback(Output('easy-hard','children'),
+              [Input('hard-button','n_clicks'),
+               Input('easy-button','n_clicks')],
+              [State('hidden-div-1','children'),
+              State('hidden-div-3','children')])
+def check_selection(n_clicks_1,n_clicks_2,usrcode,name):
+    if sum([n_clicks_1,n_clicks_2]) == 0:
+        raise PreventUpdate
+    else:
+        changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+        if usrcode:
+            if 'easy-button' in changed_id:
+                selection = 'Easy'
+                question_select(usrcode[0],name[0],selection)
+                return []
+            elif 'hard-button' in changed_id:
+                selection = 'Hard'
+                question_select(usrcode[0],name[0],selection)
+                return []
+            else:
+                raise PreventUpdate
+    
+    
 @app.callback(Output('score-abcd','children'),
               [Input('a-button-1','n_clicks'),
                 Input('b-button-1','n_clicks'),
